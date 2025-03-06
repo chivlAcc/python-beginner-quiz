@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Mengingat Python Dasar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        #kuis-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .soal {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            width: 200px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: #5cb85c;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        #feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        #skor {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="kuis-container">
+        <h1>Kuis Mengingat Python Dasar</h1>
+        <div id="soal-area" class="soal"></div>
+        <input type="text" id="jawaban-input" placeholder="Jawaban Anda">
+        <button id="submit-button">Submit Jawaban</button>
+        <div id="feedback"></div>
+        <div id="skor"></div>
+        <button id="restart-button" style="display: none;">Mulai Ulang Kuis</button>
+    </div>
+
+    <script>
+        const daftarSoalHTML = [
+            {"pertanyaan": "Apa tipe data dari angka 10?", "jawaban": "integer"},
+            {"pertanyaan": "Apa output dari print(5 + 3)?", "jawaban": "8"},
+            {"pertanyaan": "Operator apa yang digunakan untuk perbandingan kesetaraan?", "jawaban": "=="},
+            {"pertanyaan": "Apa kegunaan dari \\\\n?", "jawaban": "baris baru"},
+            {"pertanyaan": "Benar atau Salah: String harus diapit tanda kutip.", "jawaban": "benar"},
+            {"pertanyaan": "Berapakah hasil dari 10 % 3?", "jawaban": "1"},
+            {"pertanyaan": "Apa output dari print('Halo' + 'Dunia')?", "jawaban": "halodunia"},
+            {"pertanyaan": "Simbol apa yang digunakan untuk operasi perkalian?", "jawaban": "*"},
+            {"pertanyaan": "Manakah operator perbandingan 'lebih besar dari atau sama dengan'?", "jawaban": ">="},
+            {"pertanyaan": "Tipe data apa yang digunakan untuk teks?", "jawaban": "string"},
+            {"pertanyaan": "Apa hasil dari 2 ** 3?", "jawaban": "8"},
+            {"pertanyaan": "Operator apa yang digunakan untuk pengurangan?", "jawaban": "-"},
+            {"pertanyaan": "Manakah operator perbandingan 'tidak sama dengan'?", "jawaban": "!="},
+            {"pertanyaan": "Apa output dari print(7 // 2)?", "jawaban": "3"},
+            {"pertanyaan": "Bagaimana cara menyimpan nilai dalam pemrograman Python?", "jawaban": "variabel"},
+            {"pertanyaan": "Apa keyword yang digunakan untuk struktur kontrol 'jika'?", "jawaban": "if"},
+            {"pertanyaan": "Manakah operator perbandingan 'lebih kecil dari'?", "jawaban": "<"},
+            {"pertanyaan": "Apa output dari print(15 / 3)?", "jawaban": "5.0"},
+            {"pertanyaan": "Bagaimana cara membuat baris baru dalam string tanpa enter?", "jawaban": "\\\\n"},
+            {"pertanyaan": "Apa keyword yang digunakan untuk kondisi alternatif setelah 'if'?", "jawaban": "elif"}
+        ];
+
+        let soalKuisHTML = [];
+        let nomorSoal = 0;
+        let kesalahanHTML = 0;
+        let skorHTML = 0;
+        let soalAcakIndeksHTML = [];
+
+        const soalAreaHTML = document.getElementById('soal-area');
+        const jawabanInputHTML = document.getElementById('jawaban-input');
+        const submitButtonHTML = document.getElementById('submit-button');
+        const feedbackHTML = document.getElementById('feedback');
+        const skorAreaHTML = document.getElementById('skor');
+        const restartButtonHTML = document.getElementById('restart-button');
+
+        function acakSoalHTML() {
+            soalAcakIndeksHTML = [];
+            while (soalAcakIndeksHTML.length < 20 && soalAcakIndeksHTML.length < daftarSoalHTML.length) {
+                let indexAcak = Math.floor(Math.random() * daftarSoalHTML.length);
+                if (!soalAcakIndeksHTML.includes(indexAcak)) {
+                    soalAcakIndeksHTML.push(indexAcak);
+                }
+            }
+            soalKuisHTML = soalAcakIndeksHTML.map(index => daftarSoalHTML[index]);
+        }
+
+        function tampilkanSoalHTML() {
+            if (nomorSoal < soalKuisHTML.length) {
+                soalAreaHTML.textContent = `Soal ${nomorSoal + 1}: ${soalKuisHTML[nomorSoal].pertanyaan}`;
+                jawabanInputHTML.value = ''; // Kosongkan input jawaban
+                feedbackHTML.textContent = ''; // Kosongkan feedback
+            } else {
+                selesaikanKuisHTML();
+            }
+        }
+
+        function periksaJawabanHTML() {
+            const jawabanUserHTML = jawabanInputHTML.value.toLowerCase();
+            const jawabanBenarHTML = soalKuisHTML[nomorSoal].jawaban.toLowerCase();
+
+            if (jawabanUserHTML === jawabanBenarHTML) {
+                feedbackHTML.textContent = 'Jawaban Benar!';
+                feedbackHTML.style.color = 'green';
+                skorHTML++;
+            } else {
+                feedbackHTML.textContent = `Jawaban Salah. Jawaban yang benar adalah: ${soalKuisHTML[nomorSoal].jawaban}`;
+                feedbackHTML.style.color = 'red';
+                kesalahanHTML++;
+            }
+
+            nomorSoal++;
+
+            if (kesalahanHTML >= 3) {
+                feedbackHTML.textContent = 'Anda telah menjawab 3 soal salah. Kuis dimulai dari awal!';
+                feedbackHTML.style.color = 'orange';
+                restartButtonHTML.style.display = 'block'; // Tampilkan tombol restart
+                submitButtonHTML.disabled = true; // Menonaktifkan tombol submit sementara
+            } else {
+                tampilkanSoalHTML();
+            }
+            updateSkorHTML();
+        }
+
+        function selesaikanKuisHTML() {
+            soalAreaHTML.textContent = 'Kuis Selesai!';
+            jawabanInputHTML.style.display = 'none'; // Sembunyikan input jawaban
+            submitButtonHTML.style.display = 'none'; // Sembunyikan tombol submit
+            skorAreaHTML.textContent = `Skor Akhir Anda: ${skorHTML} dari 20`;
+            restartButtonHTML.style.display = 'block'; // Tampilkan tombol restart
+        }
+
+        function mulaiKuisHTML() {
+            acakSoalHTML();
+            nomorSoal = 0;
+            kesalahanHTML = 0;
+            skorHTML = 0;
+            restartButtonHTML.style.display = 'none'; // Sembunyikan tombol restart saat mulai
+            jawabanInputHTML.style.display = 'block'; // Tampilkan input jawaban
+            submitButtonHTML.style.display = 'block'; // Tampilkan tombol submit
+            submitButtonHTML.disabled = false; // Mengaktifkan kembali tombol submit
+            feedbackHTML.textContent = '';
+            feedbackHTML.style.color = ''; // Reset warna feedback
+            updateSkorHTML();
+            tampilkanSoalHTML();
+        }
+
+        function updateSkorHTML() {
+            skorAreaHTML.textContent = `Skor: ${skorHTML} | Kesalahan: ${kesalahanHTML}`;
+        }
+
+        submitButtonHTML.addEventListener('click', periksaJawabanHTML);
+        restartButtonHTML.addEventListener('click', mulaiKuisHTML);
+
+        // Memulai kuis saat halaman dimuat
+        mulaiKuisHTML();
+    </script>
+
+</body>
+</html>
