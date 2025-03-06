@@ -69,7 +69,7 @@
             {"pertanyaan": "Apa tipe data dari angka 10?", "jawaban": "integer"},
             {"pertanyaan": "Apa output dari print(5 + 3)?", "jawaban": "8"},
             {"pertanyaan": "Operator apa yang digunakan untuk perbandingan kesetaraan?", "jawaban": "=="},
-            {"pertanyaan": "Apa kegunaan dari \\\\n?", "jawaban": "baris baru"},
+            {"pertanyaan": "Apa kegunaan dari \\\n?", "jawaban": "baris baru"},
             {"pertanyaan": "Benar atau Salah: String harus diapit tanda kutip.", "jawaban": "benar"},
             {"pertanyaan": "Berapakah hasil dari 10 % 3?", "jawaban": "1"},
             {"pertanyaan": "Apa output dari print('Halo' + 'Dunia')?", "jawaban": "halodunia"},
@@ -93,6 +93,7 @@
         let kesalahanHTML = 0;
         let skorHTML = 0;
         let soalAcakIndeksHTML = [];
+        let highScoreHTML = localStorage.getItem('highScorePythonQuiz') || 0; // Variabel skor tertinggi
 
         const soalAreaHTML = document.getElementById('soal-area');
         const jawabanInputHTML = document.getElementById('jawaban-input');
@@ -115,8 +116,8 @@
         function tampilkanSoalHTML() {
             if (nomorSoal < soalKuisHTML.length) {
                 soalAreaHTML.textContent = `Soal ${nomorSoal + 1}: ${soalKuisHTML[nomorSoal].pertanyaan}`;
-                jawabanInputHTML.value = ''; // Kosongkan input jawaban
-                feedbackHTML.textContent = ''; // Kosongkan feedback
+                jawabanInputHTML.value = '';
+                feedbackHTML.textContent = '';
             } else {
                 selesaikanKuisHTML();
             }
@@ -141,8 +142,9 @@
             if (kesalahanHTML >= 3) {
                 feedbackHTML.textContent = 'Anda telah menjawab 3 soal salah. Kuis dimulai dari awal!';
                 feedbackHTML.style.color = 'orange';
-                restartButtonHTML.style.display = 'block'; // Tampilkan tombol restart
-                submitButtonHTML.disabled = true; // Menonaktifkan tombol submit sementara
+                skorAreaHTML.textContent = `Skor Anda: ${skorHTML} | Skor Tertinggi: ${highScoreHTML}`; // Menampilkan skor tertinggi saat game over
+                restartButtonHTML.style.display = 'block';
+                submitButtonHTML.disabled = true;
             } else {
                 tampilkanSoalHTML();
             }
@@ -151,10 +153,11 @@
 
         function selesaikanKuisHTML() {
             soalAreaHTML.textContent = 'Kuis Selesai!';
-            jawabanInputHTML.style.display = 'none'; // Sembunyikan input jawaban
-            submitButtonHTML.style.display = 'none'; // Sembunyikan tombol submit
+            jawabanInputHTML.style.display = 'none';
+            submitButtonHTML.style.display = 'none';
             skorAreaHTML.textContent = `Skor Akhir Anda: ${skorHTML} dari 20`;
-            restartButtonHTML.style.display = 'block'; // Tampilkan tombol restart
+            skorAreaHTML.textContent += ` | Skor Tertinggi: ${highScoreHTML}`; // Menampilkan skor tertinggi saat kuis selesai
+            restartButtonHTML.style.display = 'block';
         }
 
         function mulaiKuisHTML() {
@@ -162,18 +165,25 @@
             nomorSoal = 0;
             kesalahanHTML = 0;
             skorHTML = 0;
-            restartButtonHTML.style.display = 'none'; // Sembunyikan tombol restart saat mulai
-            jawabanInputHTML.style.display = 'block'; // Tampilkan input jawaban
-            submitButtonHTML.style.display = 'block'; // Tampilkan tombol submit
-            submitButtonHTML.disabled = false; // Mengaktifkan kembali tombol submit
+            restartButtonHTML.style.display = 'none';
+            jawabanInputHTML.style.display = 'block';
+            submitButtonHTML.style.display = 'block';
+            submitButtonHTML.disabled = false;
             feedbackHTML.textContent = '';
-            feedbackHTML.style.color = ''; // Reset warna feedback
+            feedbackHTML.style.color = '';
             updateSkorHTML();
             tampilkanSoalHTML();
         }
 
         function updateSkorHTML() {
             skorAreaHTML.textContent = `Skor: ${skorHTML} | Kesalahan: ${kesalahanHTML}`;
+
+            // Periksa dan perbarui skor tertinggi
+            let currentHighScore = localStorage.getItem('highScorePythonQuiz') || 0;
+            if (skorHTML > currentHighScore) {
+                highScoreHTML = skorHTML;
+                localStorage.setItem('highScorePythonQuiz', highScoreHTML);
+            }
         }
 
         submitButtonHTML.addEventListener('click', periksaJawabanHTML);
