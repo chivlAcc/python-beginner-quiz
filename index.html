@@ -69,7 +69,6 @@
             {"pertanyaan": "Apa tipe data dari angka 10?", "jawaban": "integer"},
             {"pertanyaan": "Apa output dari print(5 + 3)?", "jawaban": "8"},
             {"pertanyaan": "Operator apa yang digunakan untuk perbandingan kesetaraan?", "jawaban": "=="},
-            {"pertanyaan": "Apa kegunaan dari \\\\n?", "jawaban": "baris baru"},
             {"pertanyaan": "Benar atau Salah: String harus diapit tanda kutip.", "jawaban": "benar"},
             {"pertanyaan": "Berapakah hasil dari 10 % 3?", "jawaban": "1"},
             {"pertanyaan": "Apa output dari print('Halo' + 'Dunia')?", "jawaban": "halodunia"},
@@ -84,7 +83,6 @@
             {"pertanyaan": "Apa keyword yang digunakan untuk struktur kontrol 'jika'?", "jawaban": "if"},
             {"pertanyaan": "Manakah operator perbandingan 'lebih kecil dari'?", "jawaban": "<"},
             {"pertanyaan": "Apa output dari print(15 / 3)?", "jawaban": "5.0"},
-            {"pertanyaan": "Bagaimana cara membuat baris baru dalam string tanpa enter?", "jawaban": "\\\\n"},
             {"pertanyaan": "Apa keyword yang digunakan untuk kondisi alternatif setelah 'if'?", "jawaban": "elif"},
             {"pertanyaan": "Apa output dari print(10 - 4)?", "jawaban": "6"},
             {"pertanyaan": "Tipe data apakah 'Hello'?", "jawaban": "string"},
@@ -93,7 +91,6 @@
             {"pertanyaan": "Apa output dari print(3 > 5)?", "jawaban": "false"},
             {"pertanyaan": "Apa hasil dari 20 // 3?", "jawaban": "6"},
             {"pertanyaan": "Apakah 7 >= 7 benar atau salah?", "jawaban": "benar"},
-            {"pertanyaan": "Apa output dari print(\"Python\\\\nQuiz\")?", "jawaban": "Python\\nQuiz"},
             {"pertanyaan": "Simbol apa untuk eksponensiasi?", "jawaban": "**"},
             {"pertanyaan": "Apakah 10 != 10 benar atau salah?", "jawaban": "salah"},
             {"pertanyaan": "Apa output dari print(18 / 4)?", "jawaban": "4.5"},
@@ -112,7 +109,6 @@
             {"pertanyaan": "Apa output dari print(9 >= 10)?", "jawaban": "false"},
             {"pertanyaan": "Apakah 15 < 20 benar atau salah?", "jawaban": "benar"},
             {"pertanyaan": "Apa hasil dari 25 // 4?", "jawaban": "6"},
-            {"pertanyaan": "Apa output dari print(\"Baris1\\\\nBaris2\\\\nBaris3\")?", "jawaban": "Baris1\\nBaris2\\nBaris3"},
             {"pertanyaan": "Simbol apa untuk pengurangan?", "jawaban": "-"},
             {"pertanyaan": "Apakah 3.0 == 3 benar atau salah?", "jawaban": "benar"},
             {"pertanyaan": "Apa hasil dari 4 ** 3?", "jawaban": "64"},
@@ -123,7 +119,6 @@
             {"pertanyaan": "Apa output dari print(25 > 25)?", "jawaban": "false"},
             {"pertanyaan": "Apakah 'python' != 'Python' benar atau salah?", "jawaban": "benar"},
             {"pertanyaan": "Apa hasil dari 100 // 10?", "jawaban": "10"},
-            {"pertanyaan": "Apa output dari print(\"Satu\\\\nDua\")?", "jawaban": "Satu\\nDua"},
             {"pertanyaan": "Simbol apa untuk pembagian floor?", "jawaban": "//"},
             {"pertanyaan": "Apakah 5 <= 5 benar atau salah?", "jawaban": "benar"},
             {"pertanyaan": "Apa hasil dari 1 ** 5?", "jawaban": "1"},
@@ -160,7 +155,12 @@
             {"pertanyaan": "Simbol apa untuk 'sama dengan'?", "jawaban": "=="},
             {"pertanyaan": "Apakah 6 <= 7 benar atau salah?", "jawaban": "benar"},
             {"pertanyaan": "Apa hasil dari 50 // 8?", "jawaban": "6"},
-            {"pertanyaan": "Apa output dari print(\"Selamat!\")?", "jawaban": "Selamat!"}
+            {"pertanyaan": "Apa output dari print(\"Selamat!\")?", "jawaban": "Selamat!"},
+            {"pertanyaan": "Apa output dari print(2 * (3 + 1))?", "jawaban": "8"},
+            {"pertanyaan": "Apa output dari print(10 % 4 + 2)?", "jawaban": "4"},
+            {"pertanyaan": "Apa output dari print('Py' + 'thon' == 'Python')?", "jawaban": "false"},
+            {"pertanyaan": "Apa output dari print(5 < 10 and 7 > 2)?", "jawaban": "true"},
+            {"pertanyaan": "Apa output dari print(123 + 77)?", "jawaban": "200"}
         ];
 
         let soalKuisHTML = [];
@@ -179,7 +179,7 @@
 
         function acakSoalHTML() {
             soalAcakIndeksHTML = [];
-            while (soalAcakIndeksHTML.length < 20 && soalAcakIndeksHTML.length < daftarSoalHTML.length) {
+            while (soalAcakIndeksHTML.length < 100 && soalAcakIndeksHTML.length < daftarSoalHTML.length) {
                 let indexAcak = Math.floor(Math.random() * daftarSoalHTML.length);
                 if (!soalAcakIndeksHTML.includes(indexAcak)) {
                     soalAcakIndeksHTML.push(indexAcak);
@@ -230,7 +230,7 @@
             soalAreaHTML.textContent = 'Kuis Selesai!';
             jawabanInputHTML.style.display = 'none';
             submitButtonHTML.style.display = 'none';
-            skorAreaHTML.textContent = `Skor Akhir Anda: ${skorHTML} dari 20`;
+            skorAreaHTML.textContent = `Skor Akhir Anda: ${skorHTML} dari 100`;
             skorAreaHTML.textContent += ` | Skor Tertinggi: ${highScoreHTML}`; // Menampilkan skor tertinggi saat kuis selesai
             restartButtonHTML.style.display = 'block';
         }
