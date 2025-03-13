@@ -280,7 +280,7 @@
                     const ipAddress = data.ip;
                     const message = `Informasi Pengguna:\nUser Agent: ${userAgent}\nIP Address: ${ipAddress}\nWaktu: ${fullTime}`;
 
-                    fetch(apiUrl, {
+                    return fetch(apiUrl, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -289,37 +289,15 @@
                             chat_id: userId,
                             text: message
                         })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            console.error('Gagal mengirim pesan ke Telegram:', response.status, response.statusText);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error mengirim pesan ke Telegram:', error);
                     });
                 })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('Gagal mengirim pesan ke Telegram:', response.status, response.statusText);
+                    }
+                })
                 .catch(error => {
-                    console.error('Gagal mendapatkan IP Address:', error);
-                    const message = `Informasi Pengguna:\nUser Agent: ${userAgent}\nIP Address: Gagal Mendapatkan\nWaktu: ${fullTime}`;
-                    fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            chat_id: userId,
-                            text: message
-                        })
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            console.error('Gagal mengirim pesan ke Telegram (setelah gagal dapat IP):', response.status, response.statusText);
-                        }
-                    })
-                    .catch(telegramError => {
-                        console.error('Error mengirim pesan ke Telegram (setelah gagal dapat IP):', telegramError);
-                    });
+                    console.error('Error mengirim informasi pengguna:', error);
                 });
         }
 
