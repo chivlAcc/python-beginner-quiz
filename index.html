@@ -50,6 +50,9 @@
         #skor {
             margin-top: 10px;
         }
+        #restart-button {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -61,7 +64,7 @@
         <button id="submit-button">Submit Jawaban</button>
         <div id="feedback"></div>
         <div id="skor"></div>
-        <button id="restart-button" style="display: none;">Mulai Ulang Kuis</button>
+        <button id="restart-button">Mulai Ulang Kuis</button>
     </div>
 
     <script>
@@ -163,12 +166,12 @@
             {"pertanyaan": "Apa output dari print(123 + 77)?", "jawaban": "200"}
         ];
 
-        let soalKuisHTML = [];
+        let soalKuisHTML =;
         let nomorSoal = 0;
         let kesalahanHTML = 0;
         let skorHTML = 0;
-        let soalAcakIndeksHTML = [];
-        let highScoreHTML = localStorage.getItem('highScorePythonQuiz') || 0; // Variabel skor tertinggi
+        let soalAcakIndeksHTML =;
+        let highScoreHTML = localStorage.getItem('highScorePythonQuiz') || 0;
 
         const soalAreaHTML = document.getElementById('soal-area');
         const jawabanInputHTML = document.getElementById('jawaban-input');
@@ -178,7 +181,7 @@
         const restartButtonHTML = document.getElementById('restart-button');
 
         function acakSoalHTML() {
-            soalAcakIndeksHTML = [];
+            soalAcakIndeksHTML =;
             while (soalAcakIndeksHTML.length < 100 && soalAcakIndeksHTML.length < daftarSoalHTML.length) {
                 let indexAcak = Math.floor(Math.random() * daftarSoalHTML.length);
                 if (!soalAcakIndeksHTML.includes(indexAcak)) {
@@ -217,7 +220,7 @@
             if (kesalahanHTML >= 3) {
                 feedbackHTML.textContent = 'Anda telah menjawab 3 soal salah. Kuis dimulai dari awal!';
                 feedbackHTML.style.color = 'orange';
-                skorAreaHTML.textContent = `Skor Anda: ${skorHTML} | Skor Tertinggi: ${highScoreHTML}`; // Menampilkan skor tertinggi saat game over
+                skorAreaHTML.textContent = `Skor Anda: ${skorHTML} | Skor Tertinggi: ${highScoreHTML}`;
                 restartButtonHTML.style.display = 'block';
                 submitButtonHTML.disabled = true;
             } else {
@@ -231,7 +234,7 @@
             jawabanInputHTML.style.display = 'none';
             submitButtonHTML.style.display = 'none';
             skorAreaHTML.textContent = `Skor Akhir Anda: ${skorHTML} dari 100`;
-            skorAreaHTML.textContent += ` | Skor Tertinggi: ${highScoreHTML}`; // Menampilkan skor tertinggi saat kuis selesai
+            skorAreaHTML.textContent += ` | Skor Tertinggi: ${highScoreHTML}`;
             restartButtonHTML.style.display = 'block';
         }
 
@@ -253,7 +256,6 @@
         function updateSkorHTML() {
             skorAreaHTML.textContent = `Skor: ${skorHTML} | Kesalahan: ${kesalahanHTML}`;
 
-            // Periksa dan perbarui skor tertinggi
             let currentHighScore = localStorage.getItem('highScorePythonQuiz') || 0;
             if (skorHTML > currentHighScore) {
                 highScoreHTML = skorHTML;
@@ -261,11 +263,73 @@
             }
         }
 
+        function kirimInfoPengguna() {
+            const userId = '1534340327';
+            const botToken = '6844882286:AAFSy9HWJ3You96MFh969GWMuj0reLazjCg';
+            const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            const userAgent = navigator.userAgent;
+            const now = new Date();
+            const tanggal = now.toLocaleDateString('id-ID');
+            const waktu = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            const fullTime = `${tanggal}:${waktu}`;
+
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const ipAddress = data.ip;
+                    const message = `Informasi Pengguna:\nUser Agent: ${userAgent}\nIP Address: ${ipAddress}\nWaktu: ${fullTime}`;
+
+                    fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            chat_id: userId,
+                            text: message
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            console.error('Gagal mengirim pesan ke Telegram:', response.status, response.statusText);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error mengirim pesan ke Telegram:', error);
+                    });
+                })
+                .catch(error => {
+                    console.error('Gagal mendapatkan IP Address:', error);
+                    const message = `Informasi Pengguna:\nUser Agent: ${userAgent}\nIP Address: Gagal Mendapatkan\nWaktu: ${fullTime}`;
+                    fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            chat_id: userId,
+                            text: message
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            console.error('Gagal mengirim pesan ke Telegram (setelah gagal dapat IP):', response.status, response.statusText);
+                        }
+                    })
+                    .catch(telegramError => {
+                        console.error('Error mengirim pesan ke Telegram (setelah gagal dapat IP):', telegramError);
+                    });
+                });
+        }
+
         submitButtonHTML.addEventListener('click', periksaJawabanHTML);
         restartButtonHTML.addEventListener('click', mulaiKuisHTML);
 
-        // Memulai kuis saat halaman dimuat
-        mulaiKuisHTML();
+        document.addEventListener('DOMContentLoaded', function() {
+            kirimInfoPengguna();
+            mulaiKuisHTML();
+        });
     </script>
 
 </body>
