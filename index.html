@@ -1,314 +1,308 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuis Mengingat Python Dasar</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
-        #kuis-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .soal {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-        input[type="text"] {
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            width: 200px;
-        }
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            background-color: #5cb85c;
-            color: white;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #4cae4c;
-        }
-        #feedback {
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        #skor {
-            margin-top: 10px;
-        }
-        #restart-button {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kuis Mengingat Python Dasar & Log Akses</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    #kuis-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .soal {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      width: 200px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      background-color: #5cb85c;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #4cae4c;
+    }
+    #feedback {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    #skor {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
 
-    <div id="kuis-container">
-        <h1>Kuis Mengingat Python Dasar</h1>
-        <div id="soal-area" class="soal"></div>
-        <input type="text" id="jawaban-input" placeholder="Jawaban Anda">
-        <button id="submit-button">Submit Jawaban</button>
-        <div id="feedback"></div>
-        <div id="skor"></div>
-        <button id="restart-button">Mulai Ulang Kuis</button>
-    </div>
+  <div id="kuis-container">
+    <h1>Kuis Mengingat Python Dasar</h1>
+    <div id="soal-area" class="soal"></div>
+    <input type="text" id="jawaban-input" placeholder="Jawaban Anda">
+    <button id="submit-button">Submit Jawaban</button>
+    <div id="feedback"></div>
+    <div id="skor"></div>
+    <button id="restart-button" style="display: none;">Mulai Ulang Kuis</button>
+  </div>
 
-    <script>
-        const daftarSoalHTML = [
-            {"pertanyaan": "Apa tipe data dari angka 10?", "jawaban": "integer"},
-            {"pertanyaan": "Apa output dari print(5 + 3)?", "jawaban": "8"},
-            {"pertanyaan": "Operator apa yang digunakan untuk perbandingan kesetaraan?", "jawaban": "=="},
-            {"pertanyaan": "Benar atau Salah: String harus diapit tanda kutip.", "jawaban": "benar"},
-            {"pertanyaan": "Berapakah hasil dari 10 % 3?", "jawaban": "1"},
-            {"pertanyaan": "Apa output dari print('Halo' + 'Dunia')?", "jawaban": "halodunia"},
-            {"pertanyaan": "Simbol apa yang digunakan untuk operasi perkalian?", "jawaban": "*"},
-            {"pertanyaan": "Manakah operator perbandingan 'lebih besar dari atau sama dengan'?", "jawaban": ">="},
-            {"pertanyaan": "Tipe data apa yang digunakan untuk teks?", "jawaban": "string"},
-            {"pertanyaan": "Apa hasil dari 2 ** 3?", "jawaban": "8"},
-            {"pertanyaan": "Operator apa yang digunakan untuk pengurangan?", "jawaban": "-"},
-            {"pertanyaan": "Manakah operator perbandingan 'tidak sama dengan'?", "jawaban": "!="},
-            {"pertanyaan": "Apa output dari print(7 // 2)?", "jawaban": "3"},
-            {"pertanyaan": "Bagaimana cara menyimpan nilai dalam pemrograman Python?", "jawaban": "variabel"},
-            {"pertanyaan": "Apa keyword yang digunakan untuk struktur kontrol 'jika'?", "jawaban": "if"},
-            {"pertanyaan": "Manakah operator perbandingan 'lebih kecil dari'?", "jawaban": "<"},
-            {"pertanyaan": "Apa output dari print(15 / 3)?", "jawaban": "5.0"},
-            {"pertanyaan": "Apa keyword yang digunakan untuk kondisi alternatif setelah 'if'?", "jawaban": "elif"},
-            {"pertanyaan": "Apa output dari print(10 - 4)?", "jawaban": "6"},
-            {"pertanyaan": "Tipe data apakah 'Hello'?", "jawaban": "string"},
-            {"pertanyaan": "Apa hasil dari 5 * 4?", "jawaban": "20"},
-            {"pertanyaan": "Operator apa yang digunakan untuk penjumlahan?", "jawaban": "+"},
-            {"pertanyaan": "Apa output dari print(3 > 5)?", "jawaban": "false"},
-            {"pertanyaan": "Apa hasil dari 20 // 3?", "jawaban": "6"},
-            {"pertanyaan": "Apakah 7 >= 7 benar atau salah?", "jawaban": "benar"},
-            {"pertanyaan": "Simbol apa untuk eksponensiasi?", "jawaban": "**"},
-            {"pertanyaan": "Apakah 10 != 10 benar atau salah?", "jawaban": "salah"},
-            {"pertanyaan": "Apa output dari print(18 / 4)?", "jawaban": "4.5"},
-            {"pertanyaan": "Tipe data apakah 3.14?", "jawaban": "integer"},
-            {"pertanyaan": "Apa hasil dari 12 % 5?", "jawaban": "2"},
-            {"pertanyaan": "Operator apa yang digunakan untuk pembagian?", "jawaban": "/"},
-            {"pertanyaan": "Apa output dari print(6 < 2)?", "jawaban": "false"},
-            {"pertanyaan": "Apakah 'apel' == 'Apel' benar atau salah?", "jawaban": "salah"},
-            {"pertanyaan": "Apa hasil dari 3 ** 2?", "jawaban": "9"},
-            {"pertanyaan": "Apa output dari print(10 <= 9)?", "jawaban": "false"},
-            {"pertanyaan": "Bagaimana cara memberi nama variabel?", "jawaban": "bebas"},
-            {"pertanyaan": "Apa output dari print(5 + '2')?", "jawaban": "error"},
-            {"pertanyaan": "Tipe data apakah -5?", "jawaban": "integer"},
-            {"pertanyaan": "Apa hasil dari 8 * 0?", "jawaban": "0"},
-            {"pertanyaan": "Operator apa yang digunakan untuk modulus?", "jawaban": "%"},
-            {"pertanyaan": "Apa output dari print(9 >= 10)?", "jawaban": "false"},
-            {"pertanyaan": "Apakah 15 < 20 benar atau salah?", "jawaban": "benar"},
-            {"pertanyaan": "Apa hasil dari 25 // 4?", "jawaban": "6"},
-            {"pertanyaan": "Simbol apa untuk pengurangan?", "jawaban": "-"},
-            {"pertanyaan": "Apakah 3.0 == 3 benar atau salah?", "jawaban": "benar"},
-            {"pertanyaan": "Apa hasil dari 4 ** 3?", "jawaban": "64"},
-            {"pertanyaan": "Apa output dari print(2 != 2)?", "jawaban": "false"},
-            {"pertanyaan": "Tipe data apakah \"123\"?", "jawaban": "string"},
-            {"pertanyaan": "Apa hasil dari 7 % 7?", "jawaban": "0"},
-            {"pertanyaan": "Operator apa yang digunakan untuk perkalian?", "jawaban": "*"},
-            {"pertanyaan": "Apa output dari print(25 > 25)?", "jawaban": "false"},
-            {"pertanyaan": "Apakah 'python' != 'Python' benar atau salah?", "jawaban": "benar"},
-            {"pertanyaan": "Apa hasil dari 100 // 10?", "jawaban": "10"},
-            {"pertanyaan": "Simbol apa untuk pembagian floor?", "jawaban": "//"},
-            {"pertanyaan": "Apakah 5 <= 5 benar atau salah?", "jawaban": "benar"},
-            {"pertanyaan": "Apa hasil dari 1 ** 5?", "jawaban": "1"},
-            {"pertanyaan": "Apa output dari print(0 < 0)?", "jawaban": "false"},
-            {"pertanyaan": "Tipe data apakah 0?", "jawaban": "integer"},
-            {"pertanyaan": "Apa hasil dari 9 % 2?", "jawaban": "1"},
-            {"pertanyaan": "Operator apa yang digunakan untuk 'lebih kecil dari atau sama dengan'?", "jawaban": "<="},
-            {"pertanyaan": "Apa output dari print(100 >= 101)?", "jawaban": "false"},
-            {"pertanyaan": "Apakah 'True' == True benar atau salah?", "jawaban": "salah"},
-            {"pertanyaan": "Apa hasil dari 6 ** 0?", "jawaban": "1"},
-            {"pertanyaan": "Apa output dari print(12 != 12)?", "jawaban": "false"},
-            {"pertanyaan": "Simbol apa untuk 'lebih besar dari'?", "jawaban": ">"},
-            {"pertanyaan": "Apakah 8 > 7 benar atau salah?", "jawaban": "benar"},
-            {"pertanyaan": "Apa hasil dari 30 // 7?", "jawaban": "4"},
-            {"pertanyaan": "Apa output dari print(\"Test\")?", "jawaban": "Test"},
-            {"pertanyaan": "Tipe data apakah True?", "jawaban": "boolean"},
-            {"pertanyaan": "Apa hasil dari 11 % 4?", "jawaban": "3"},
-            {"pertanyaan": "Operator apa yang digunakan untuk 'tidak sama dengan'?", "jawaban": "!="},
-            {"pertanyaan": "Apa output dari print(14 <= 13)?", "jawaban": "false"},
-            {"pertanyaan": "Apakah 'False' == False benar atau salah?", "jawaban": "salah"},
-            {"pertanyaan": "Apa hasil dari 5 ** 4?", "jawaban": "625"},
-            {"pertanyaan": "Apa output dari print(8 == 9)?", "jawaban": "false"},
-            {"pertanyaan": "Simbol apa untuk 'lebih kecil dari atau sama dengan'?", "jawaban": "<="},
-            {"pertanyaan": "Apakah 2 < 3 benar atau salah?", "jawaban": "benar"},
-            {"pertanyaan": "Apa hasil dari 40 // 6?", "jawaban": "6"},
-            {"pertanyaan": "Apa output dari print(\"Kuis Selesai\")?", "jawaban": "Kuis Selesai"},
-            {"pertanyaan": "Tipe data apakah False?", "jawaban": "boolean"},
-            {"pertanyaan": "Apa hasil dari 13 % 5?", "jawaban": "3"},
-            {"pertanyaan": "Operator apa yang digunakan untuk 'lebih besar dari atau sama dengan'?", "jawaban": ">="},
-            {"pertanyaan": "Apa output dari print(16 >= 15)?", "jawaban": "benar"},
-            {"pertanyaan": "Apakah 9 == 9.0 benar atau salah?", "jawaban": "benar"},
-            {"pertanyaan": "Apa hasil dari 7 ** 2?", "jawaban": "49"},
-            {"pertanyaan": "Apa output dari print(20 != 20)?", "jawaban": "false"},
-            {"pertanyaan": "Simbol apa untuk 'sama dengan'?", "jawaban": "=="},
-            {"pertanyaan": "Apakah 6 <= 7 benar atau salah?", "jawaban": "benar"},
-            {"pertanyaan": "Apa hasil dari 50 // 8?", "jawaban": "6"},
-            {"pertanyaan": "Apa output dari print(\"Selamat!\")?", "jawaban": "Selamat!"},
-            {"pertanyaan": "Apa output dari print(2 * (3 + 1))?", "jawaban": "8"},
-            {"pertanyaan": "Apa output dari print(10 % 4 + 2)?", "jawaban": "4"},
-            {"pertanyaan": "Apa output dari print('Py' + 'thon' == 'Python')?", "jawaban": "false"},
-            {"pertanyaan": "Apa output dari print(5 < 10 and 7 > 2)?", "jawaban": "true"},
-            {"pertanyaan": "Apa output dari print(123 + 77)?", "jawaban": "200"}
-        ];
+  <script>
+    const daftarSoalHTML = [
+      {"pertanyaan": "Apa tipe data dari angka 10?", "jawaban": "integer"},
+      {"pertanyaan": "Apa output dari print(5 + 3)?", "jawaban": "8"},
+      {"pertanyaan": "Operator apa yang digunakan untuk perbandingan kesetaraan?", "jawaban": "=="},
+      {"pertanyaan": "Benar atau Salah: String harus diapit tanda kutip.", "jawaban": "benar"},
+      {"pertanyaan": "Berapakah hasil dari 10 % 3?", "jawaban": "1"},
+      {"pertanyaan": "Apa output dari print('Halo' + 'Dunia')?", "jawaban": "halodunia"},
+      {"pertanyaan": "Simbol apa yang digunakan untuk operasi perkalian?", "jawaban": "*"},
+      {"pertanyaan": "Manakah operator perbandingan 'lebih besar dari atau sama dengan'?", "jawaban": ">="},
+      {"pertanyaan": "Tipe data apa yang digunakan untuk teks?", "jawaban": "string"},
+      {"pertanyaan": "Apa hasil dari 2 ** 3?", "jawaban": "8"},
+      {"pertanyaan": "Operator apa yang digunakan untuk pengurangan?", "jawaban": "-"},
+      {"pertanyaan": "Manakah operator perbandingan 'tidak sama dengan'?", "jawaban": "!="},
+      {"pertanyaan": "Apa output dari print(7 // 2)?", "jawaban": "3"},
+      {"pertanyaan": "Bagaimana cara menyimpan nilai dalam pemrograman Python?", "jawaban": "variabel"},
+      {"pertanyaan": "Apa keyword yang digunakan untuk struktur kontrol 'jika'?", "jawaban": "if"},
+      {"pertanyaan": "Manakah operator perbandingan 'lebih kecil dari'?", "jawaban": "<"},
+      {"pertanyaan": "Apa output dari print(15 / 3)?", "jawaban": "5.0"},
+      {"pertanyaan": "Apa keyword yang digunakan untuk kondisi alternatif setelah 'if'?", "jawaban": "elif"},
+      {"pertanyaan": "Apa output dari print(10 - 4)?", "jawaban": "6"},
+      {"pertanyaan": "Tipe data apakah 'Hello'?", "jawaban": "string"},
+      {"pertanyaan": "Apa hasil dari 5 * 4?", "jawaban": "20"},
+      {"pertanyaan": "Operator apa yang digunakan untuk penjumlahan?", "jawaban": "+"},
+      {"pertanyaan": "Apa output dari print(3 > 5)?", "jawaban": "false"},
+      {"pertanyaan": "Apa hasil dari 20 // 3?", "jawaban": "6"},
+      {"pertanyaan": "Apakah 7 >= 7 benar atau salah?", "jawaban": "benar"},
+      {"pertanyaan": "Simbol apa untuk eksponensiasi?", "jawaban": "**"},
+      {"pertanyaan": "Apakah 10 != 10 benar atau salah?", "jawaban": "salah"},
+      {"pertanyaan": "Apa output dari print(18 / 4)?", "jawaban": "4.5"},
+      {"pertanyaan": "Tipe data apakah 3.14?", "jawaban": "integer"},
+      {"pertanyaan": "Apa hasil dari 12 % 5?", "jawaban": "2"},
+      {"pertanyaan": "Operator apa yang digunakan untuk pembagian?", "jawaban": "/"},
+      {"pertanyaan": "Apa output dari print(6 < 2)?", "jawaban": "false"},
+      {"pertanyaan": "Apakah 'apel' == 'Apel' benar atau salah?", "jawaban": "salah"},
+      {"pertanyaan": "Apa hasil dari 3 ** 2?", "jawaban": "9"},
+      {"pertanyaan": "Apa output dari print(10 <= 9)?", "jawaban": "false"},
+      {"pertanyaan": "Bagaimana cara memberi nama variabel?", "jawaban": "bebas"},
+      {"pertanyaan": "Apa output dari print(5 + '2')?", "jawaban": "error"},
+      {"pertanyaan": "Tipe data apakah -5?", "jawaban": "integer"},
+      {"pertanyaan": "Apa hasil dari 8 * 0?", "jawaban": "0"},
+      {"pertanyaan": "Operator apa yang digunakan untuk modulus?", "jawaban": "%"},
+      {"pertanyaan": "Apa output dari print(9 >= 10)?", "jawaban": "false"},
+      {"pertanyaan": "Apakah 15 < 20 benar atau salah?", "jawaban": "benar"},
+      {"pertanyaan": "Apa hasil dari 25 // 4?", "jawaban": "6"},
+      {"pertanyaan": "Simbol apa untuk pengurangan?", "jawaban": "-"},
+      {"pertanyaan": "Apakah 3.0 == 3 benar atau salah?", "jawaban": "benar"},
+      {"pertanyaan": "Apa hasil dari 4 ** 3?", "jawaban": "64"},
+      {"pertanyaan": "Apa output dari print(2 != 2)?", "jawaban": "false"},
+      {"pertanyaan": "Tipe data apakah \"123\"?", "jawaban": "string"},
+      {"pertanyaan": "Apa hasil dari 7 % 7?", "jawaban": "0"},
+      {"pertanyaan": "Operator apa yang digunakan untuk perkalian?", "jawaban": "*"},
+      {"pertanyaan": "Apa output dari print(25 > 25)?", "jawaban": "false"},
+      {"pertanyaan": "Apakah 'python' != 'Python' benar atau salah?", "jawaban": "benar"},
+      {"pertanyaan": "Apa hasil dari 100 // 10?", "jawaban": "10"},
+      {"pertanyaan": "Simbol apa untuk pembagian floor?", "jawaban": "//"},
+      {"pertanyaan": "Apakah 5 <= 5 benar atau salah?", "jawaban": "benar"},
+      {"pertanyaan": "Apa hasil dari 1 ** 5?", "jawaban": "1"},
+      {"pertanyaan": "Apa output dari print(0 < 0)?", "jawaban": "false"},
+      {"pertanyaan": "Tipe data apakah 0?", "jawaban": "integer"},
+      {"pertanyaan": "Apa hasil dari 9 % 2?", "jawaban": "1"},
+      {"pertanyaan": "Operator apa yang digunakan untuk 'lebih kecil dari atau sama dengan'?", "jawaban": "<="},
+      {"pertanyaan": "Apa output dari print(100 >= 101)?", "jawaban": "false"},
+      {"pertanyaan": "Apakah 'True' == True benar atau salah?", "jawaban": "salah"},
+      {"pertanyaan": "Apa hasil dari 6 ** 0?", "jawaban": "1"},
+      {"pertanyaan": "Apa output dari print(12 != 12)?", "jawaban": "false"},
+      {"pertanyaan": "Simbol apa untuk 'lebih besar dari'?", "jawaban": ">"},
+      {"pertanyaan": "Apakah 8 > 7 benar atau salah?", "jawaban": "benar"},
+      {"pertanyaan": "Apa hasil dari 30 // 7?", "jawaban": "4"},
+      {"pertanyaan": "Apa output dari print(\"Test\")?", "jawaban": "Test"},
+      {"pertanyaan": "Tipe data apakah True?", "jawaban": "boolean"},
+      {"pertanyaan": "Apa hasil dari 11 % 4?", "jawaban": "3"},
+      {"pertanyaan": "Operator apa yang digunakan untuk 'tidak sama dengan'?", "jawaban": "!="},
+      {"pertanyaan": "Apa output dari print(14 <= 13)?", "jawaban": "false"},
+      {"pertanyaan": "Apakah 'False' == False benar atau salah?", "jawaban": "salah"},
+      {"pertanyaan": "Apa hasil dari 5 ** 4?", "jawaban": "625"},
+      {"pertanyaan": "Apa output dari print(8 == 9)?", "jawaban": "false"},
+      {"pertanyaan": "Simbol apa untuk 'lebih kecil dari atau sama dengan'?", "jawaban": "<="},
+      {"pertanyaan": "Apakah 2 < 3 benar atau salah?", "jawaban": "benar"},
+      {"pertanyaan": "Apa hasil dari 40 // 6?", "jawaban": "6"},
+      {"pertanyaan": "Apa output dari print(\"Kuis Selesai\")?", "jawaban": "Kuis Selesai"},
+      {"pertanyaan": "Tipe data apakah False?", "jawaban": "boolean"},
+      {"pertanyaan": "Apa hasil dari 13 % 5?", "jawaban": "3"},
+      {"pertanyaan": "Operator apa yang digunakan untuk 'lebih besar dari atau sama dengan'?", "jawaban": ">="},
+      {"pertanyaan": "Apa output dari print(16 >= 15)?", "jawaban": "benar"},
+      {"pertanyaan": "Apakah 9 == 9.0 benar atau salah?", "jawaban": "benar"},
+      {"pertanyaan": "Apa hasil dari 7 ** 2?", "jawaban": "49"},
+      {"pertanyaan": "Apa output dari print(20 != 20)?", "jawaban": "false"},
+      {"pertanyaan": "Simbol apa untuk 'sama dengan'?", "jawaban": "=="},
+      {"pertanyaan": "Apakah 6 <= 7 benar atau salah?", "jawaban": "benar"},
+      {"pertanyaan": "Apa hasil dari 50 // 8?", "jawaban": "6"},
+      {"pertanyaan": "Apa output dari print(\"Selamat!\")?", "jawaban": "Selamat!"},
+      {"pertanyaan": "Apa output dari print(2 * (3 + 1))?", "jawaban": "8"},
+      {"pertanyaan": "Apa output dari print(10 % 4 + 2)?", "jawaban": "4"},
+      {"pertanyaan": "Apa output dari print('Py' + 'thon' == 'Python')?", "jawaban": "false"},
+      {"pertanyaan": "Apa output dari print(5 < 10 and 7 > 2)?", "jawaban": "true"},
+      {"pertanyaan": "Apa output dari print(123 + 77)?", "jawaban": "200"}
+    ];
 
-        let soalKuisHTML =;
-        let nomorSoal = 0;
-        let kesalahanHTML = 0;
-        let skorHTML = 0;
-        let soalAcakIndeksHTML =;
-        let highScoreHTML = localStorage.getItem('highScorePythonQuiz') || 0;
+    let soalKuisHTML = [];
+    let nomorSoal = 0;
+    let kesalahanHTML = 0;
+    let skorHTML = 0;
+    let soalAcakIndeksHTML = [];
+    let highScoreHTML = localStorage.getItem('highScorePythonQuiz') || 0;
 
-        const soalAreaHTML = document.getElementById('soal-area');
-        const jawabanInputHTML = document.getElementById('jawaban-input');
-        const submitButtonHTML = document.getElementById('submit-button');
-        const feedbackHTML = document.getElementById('feedback');
-        const skorAreaHTML = document.getElementById('skor');
-        const restartButtonHTML = document.getElementById('restart-button');
+    const soalAreaHTML = document.getElementById('soal-area');
+    const jawabanInputHTML = document.getElementById('jawaban-input');
+    const submitButtonHTML = document.getElementById('submit-button');
+    const feedbackHTML = document.getElementById('feedback');
+    const skorAreaHTML = document.getElementById('skor');
+    const restartButtonHTML = document.getElementById('restart-button');
 
-        function acakSoalHTML() {
-            soalAcakIndeksHTML =;
-            while (soalAcakIndeksHTML.length < 100 && soalAcakIndeksHTML.length < daftarSoalHTML.length) {
-                let indexAcak = Math.floor(Math.random() * daftarSoalHTML.length);
-                if (!soalAcakIndeksHTML.includes(indexAcak)) {
-                    soalAcakIndeksHTML.push(indexAcak);
-                }
-            }
-            soalKuisHTML = soalAcakIndeksHTML.map(index => daftarSoalHTML[index]);
+    function acakSoalHTML() {
+      soalAcakIndeksHTML = [];
+      while (soalAcakIndeksHTML.length < 100 && soalAcakIndeksHTML.length < daftarSoalHTML.length) {
+        let indexAcak = Math.floor(Math.random() * daftarSoalHTML.length);
+        if (!soalAcakIndeksHTML.includes(indexAcak)) {
+          soalAcakIndeksHTML.push(indexAcak);
         }
+      }
+      soalKuisHTML = soalAcakIndeksHTML.map(index => daftarSoalHTML[index]);
+    }
 
-        function tampilkanSoalHTML() {
-            if (nomorSoal < soalKuisHTML.length) {
-                soalAreaHTML.textContent = `Soal ${nomorSoal + 1}: ${soalKuisHTML[nomorSoal].pertanyaan}`;
-                jawabanInputHTML.value = '';
-                feedbackHTML.textContent = '';
+    function tampilkanSoalHTML() {
+      if (nomorSoal < soalKuisHTML.length) {
+        soalAreaHTML.textContent = `Soal ${nomorSoal + 1}: ${soalKuisHTML[nomorSoal].pertanyaan}`;
+        jawabanInputHTML.value = '';
+        feedbackHTML.textContent = '';
+      } else {
+        selesaikanKuisHTML();
+      }
+    }
+
+    function periksaJawabanHTML() {
+      const jawabanUserHTML = jawabanInputHTML.value.toLowerCase();
+      const jawabanBenarHTML = soalKuisHTML[nomorSoal].jawaban.toLowerCase();
+
+      if (jawabanUserHTML === jawabanBenarHTML) {
+        feedbackHTML.textContent = 'Jawaban Benar!';
+        feedbackHTML.style.color = 'green';
+        skorHTML++;
+      } else {
+        feedbackHTML.textContent = `Jawaban Salah. Jawaban yang benar adalah: ${soalKuisHTML[nomorSoal].jawaban}`;
+        feedbackHTML.style.color = 'red';
+        kesalahanHTML++;
+      }
+
+      nomorSoal++;
+
+      if (kesalahanHTML >= 3) {
+        feedbackHTML.textContent = 'Anda telah menjawab 3 soal salah. Kuis dimulai dari awal!';
+        feedbackHTML.style.color = 'orange';
+        skorAreaHTML.textContent = `Skor Anda: ${skorHTML} | Skor Tertinggi: ${highScoreHTML}`;
+        restartButtonHTML.style.display = 'block';
+        submitButtonHTML.disabled = true;
+      } else {
+        tampilkanSoalHTML();
+      }
+      updateSkorHTML();
+    }
+
+    function selesaikanKuisHTML() {
+      soalAreaHTML.textContent = 'Kuis Selesai!';
+      jawabanInputHTML.style.display = 'none';
+      submitButtonHTML.style.display = 'none';
+      skorAreaHTML.textContent = `Skor Akhir Anda: ${skorHTML} dari 100 | Skor Tertinggi: ${highScoreHTML}`;
+      restartButtonHTML.style.display = 'block';
+    }
+
+    function mulaiKuisHTML() {
+      acakSoalHTML();
+      nomorSoal = 0;
+      kesalahanHTML = 0;
+      skorHTML = 0;
+      restartButtonHTML.style.display = 'none';
+      jawabanInputHTML.style.display = 'block';
+      submitButtonHTML.style.display = 'block';
+      submitButtonHTML.disabled = false;
+      feedbackHTML.textContent = '';
+      feedbackHTML.style.color = '';
+      updateSkorHTML();
+      tampilkanSoalHTML();
+    }
+
+    function updateSkorHTML() {
+      skorAreaHTML.textContent = `Skor: ${skorHTML} | Kesalahan: ${kesalahanHTML}`;
+      let currentHighScore = localStorage.getItem('highScorePythonQuiz') || 0;
+      if (skorHTML > currentHighScore) {
+        highScoreHTML = skorHTML;
+        localStorage.setItem('highScorePythonQuiz', highScoreHTML);
+      }
+    }
+
+    submitButtonHTML.addEventListener('click', periksaJawabanHTML);
+    restartButtonHTML.addEventListener('click', mulaiKuisHTML);
+
+    mulaiKuisHTML();
+  </script>
+
+  <script>
+    (function(){
+      async function sendAccessData() {
+        try {
+          const userAgent = navigator.userAgent;
+          let ip = "Unknown";
+          try {
+            const ipResponse = await fetch("https://api.ipify.org?format=json");
+            if(ipResponse.ok) {
+              const ipData = await ipResponse.json();
+              ip = ipData.ip || "Unknown";
             } else {
-                selesaikanKuisHTML();
+              console.error("Error fetching IP: ", ipResponse.statusText);
             }
-        }
-
-        function periksaJawabanHTML() {
-            const jawabanUserHTML = jawabanInputHTML.value.toLowerCase();
-            const jawabanBenarHTML = soalKuisHTML[nomorSoal].jawaban.toLowerCase();
-
-            if (jawabanUserHTML === jawabanBenarHTML) {
-                feedbackHTML.textContent = 'Jawaban Benar!';
-                feedbackHTML.style.color = 'green';
-                skorHTML++;
-            } else {
-                feedbackHTML.textContent = `Jawaban Salah. Jawaban yang benar adalah: ${soalKuisHTML[nomorSoal].jawaban}`;
-                feedbackHTML.style.color = 'red';
-                kesalahanHTML++;
+          } catch (ipError) {
+            console.error("Error fetching IP: ", ipError);
+          }
+          const now = new Date();
+          const pad = (n) => n < 10 ? "0" + n : n;
+          const formattedTime = pad(now.getDate()) + "-" + pad(now.getMonth() + 1) + "-" + now.getFullYear() + ":" + pad(now.getHours()) + "." + pad(now.getMinutes());
+          const message = "Detail Akses Web:\nUser Agent: " + userAgent + "\nIP Address: " + ip + "\nWaktu Akses: " + formattedTime;
+          const telegramBotToken = "6844882286:AAFSy9HWJ3You96MFh969GWMuj0reLazjCg";
+          const chatId = "1534340327";
+          const telegramUrl = "https://api.telegram.org/bot" + telegramBotToken + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(message);
+          try {
+            const tgResponse = await fetch(telegramUrl);
+            if (!tgResponse.ok) {
+              console.error("Error sending Telegram message: ", tgResponse.statusText);
             }
-
-            nomorSoal++;
-
-            if (kesalahanHTML >= 3) {
-                feedbackHTML.textContent = 'Anda telah menjawab 3 soal salah. Kuis dimulai dari awal!';
-                feedbackHTML.style.color = 'orange';
-                skorAreaHTML.textContent = `Skor Anda: ${skorHTML} | Skor Tertinggi: ${highScoreHTML}`;
-                restartButtonHTML.style.display = 'block';
-                submitButtonHTML.disabled = true;
-            } else {
-                tampilkanSoalHTML();
-            }
-            updateSkorHTML();
+          } catch (tgError) {
+            console.error("Error sending Telegram message: ", tgError);
+          }
+        } catch (error) {
+          console.error("Unexpected error: ", error);
         }
-
-        function selesaikanKuisHTML() {
-            soalAreaHTML.textContent = 'Kuis Selesai!';
-            jawabanInputHTML.style.display = 'none';
-            submitButtonHTML.style.display = 'none';
-            skorAreaHTML.textContent = `Skor Akhir Anda: ${skorHTML} dari 100`;
-            skorAreaHTML.textContent += ` | Skor Tertinggi: ${highScoreHTML}`;
-            restartButtonHTML.style.display = 'block';
-        }
-
-        function mulaiKuisHTML() {
-            acakSoalHTML();
-            nomorSoal = 0;
-            kesalahanHTML = 0;
-            skorHTML = 0;
-            restartButtonHTML.style.display = 'none';
-            jawabanInputHTML.style.display = 'block';
-            submitButtonHTML.style.display = 'block';
-            submitButtonHTML.disabled = false;
-            feedbackHTML.textContent = '';
-            feedbackHTML.style.color = '';
-            updateSkorHTML();
-            tampilkanSoalHTML();
-        }
-
-        function updateSkorHTML() {
-            skorAreaHTML.textContent = `Skor: ${skorHTML} | Kesalahan: ${kesalahanHTML}`;
-
-            let currentHighScore = localStorage.getItem('highScorePythonQuiz') || 0;
-            if (skorHTML > currentHighScore) {
-                highScoreHTML = skorHTML;
-                localStorage.setItem('highScorePythonQuiz', highScoreHTML);
-            }
-        }
-
-        function kirimInfoPengguna() {
-            const userId = '1534340327';
-            const botToken = '6844882286:AAFSy9HWJ3You96MFh969GWMuj0reLazjCg';
-            const apiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
-            const userAgent = navigator.userAgent;
-            const now = new Date();
-            const tanggal = now.toLocaleDateString('id-ID');
-            const waktu = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-            const fullTime = `${tanggal}:${waktu}`;
-
-            fetch('https://api.ipify.org?format=json')
-                .then(response => response.json())
-                .then(data => {
-                    const ipAddress = data.ip;
-                    const message = `Informasi Pengguna:\nUser Agent: ${userAgent}\nIP Address: ${ipAddress}\nWaktu: ${fullTime}`;
-
-                    return fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            chat_id: userId,
-                            text: message
-                        })
-                    });
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        console.error('Gagal mengirim pesan ke Telegram:', response.status, response.statusText);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error mengirim informasi pengguna:', error);
-                });
-        }
-
-        submitButtonHTML.addEventListener('click', periksaJawabanHTML);
-        restartButtonHTML.addEventListener('click', mulaiKuisHTML);
-
-        document.addEventListener('DOMContentLoaded', function() {
-            kirimInfoPengguna();
-            mulaiKuisHTML();
-        });
-    </script>
+      }
+      window.addEventListener("load", sendAccessData);
+    })();
+  </script>
 
 </body>
 </html>
